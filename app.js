@@ -20,7 +20,7 @@ app.post('/calls', (req, res) => {
     console.log(req.body);
     const phoneNumber = "+46738514392"; // Replace with a real, validated number
     res.status(200).json({ connect: phoneNumber });
-    word = "I love fat women"
+    word = "kai is gae"
     res.end();
 });
 
@@ -35,4 +35,4 @@ app.get('/', (req, res) => {
     res.status(200);
     res.send(word);
     res.end();
-}       );
+});
