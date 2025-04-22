@@ -76,33 +76,40 @@ app.post('/calls', (req, res) => {
 //   });
 
 
-app.post('/play-music', async (req, res) => {
-    try {
-      const musicData = await generateMusic("A funny music about the great amazon customer service", "Rock", "AWS");
-      const audioUrl = musicData.data[0].audio_url;
+// app.post('/play-music', async (req, res) => {
+//     try {
+//       const musicData = await generateMusic("A funny music about the great amazon customer service", "Rock", "AWS");
+//       const audioUrl = musicData.data[0].audio_url;
   
-      const response = {
-        play: audioUrl,
-        skippable: false
-      };
-      res.status(200).json(response);
-    } catch (error) {
-      console.error("Error generating music:", error);
-      res.status(500).send("Internal Server Error");
-    }
+//       const response = {
+//         play: audioUrl,
+//         skippable: false
+//       };
+//       res.status(200).json(response);
+//     } catch (error) {
+//       console.error("Error generating music:", error);
+//       res.status(500).send("Internal Server Error");
+//     }
+//   });
+
+
+app.post('/play-music', (req, res) => {
+    const response = {
+      play: "https://file-examples.com/storage/feeed4f6296807c3196e058/2017/11/file_example_MP3_700KB.mp3",
+      skippable: false
+    };
+    res.status(200).json(response);
   });
 
 
 app.post('/incoming-call', (req, res) => {
     const response = {
-      ivr: {
-        play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/Hello.mp3",
+        ivr: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/Hello.mp3",
         digits: 1,
         timeout: 10,
         repeat: 3,
         "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/play-music"
-      }
-    };
+      };
     res.status(200).json(response);
   });
 
