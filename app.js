@@ -53,9 +53,7 @@ app.post('/incoming-call', (req, res) => {
       "1": {
         "play": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/ringtone.mp3"
       },
-      "2": {
-        "play": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/calls"
-      }
+      "2":"https://ai-path-f7f6a6c9f0f8.herokuapp.com/calls"
     };
     res.status(200).json(response);
   });
