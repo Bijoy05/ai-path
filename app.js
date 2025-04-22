@@ -24,6 +24,13 @@ app.post('/calls', (req, res) => {
     res.end();
 });
 
+app.post('/call1', (req, res) => {
+    const phoneNumber = "+46123456789"; // temporary test number
+    console.log("Received request from 47elks:", req.body);
+    console.log("Responding with number:", phoneNumber);
+    res.status(200).json({ connect: phoneNumber });
+});
+
 app.get('/', (req, res) => {
     res.status(200);
     res.send(word);
