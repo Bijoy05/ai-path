@@ -46,13 +46,12 @@ app.post('/calls', (req, res) => {
 
 app.post('/incoming-call', (req, res) => {
     const response = {
-      ivr: {
-        // play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/press1.mp3",
-        options: {
-          "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/calls"
-        },
-        timeout: 10,
-        maxdigits: 1
+      ivr: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/press1.mp3",
+      digits: 1,
+      timeout: 10,
+      repeat: 3,
+      "1": {
+        "play": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/ringtone.mp3"
       }
     };
     res.status(200).json(response);
