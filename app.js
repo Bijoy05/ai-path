@@ -33,7 +33,8 @@ app.post('/call1', (req, res) => {
 
 app.post('/calls', (req, res) => {
   const response = {
-    play: "https://file-examples.com/storage/feeed4f6296807c3196e058/2017/11/file_example_MP3_700KB.mp3",
+    // play: "https://file-examples.com/storage/feeed4f6296807c3196e058/2017/11/file_example_MP3_700KB.mp3",
+    play: "https://drive.google.com/file/d/103z6W-xPlYeOrK9YDkxS18sIxiO_68Bi/view?usp=sharing",
     skippable: false
   };
   word = "kai is gae";
