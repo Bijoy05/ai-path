@@ -6,6 +6,7 @@ const port = process.env.PORT || 5501;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 let word = "Hello World!";
 
@@ -34,7 +35,7 @@ app.post('/call1', (req, res) => {
 app.post('/calls', (req, res) => {
   const response = {
     // play: "https://file-examples.com/storage/feeed4f6296807c3196e058/2017/11/file_example_MP3_700KB.mp3",
-    play: "https://drive.google.com/file/d/103z6W-xPlYeOrK9YDkxS18sIxiO_68Bi/view?usp=sharing",
+    play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/ringtone.mp3",
     skippable: false
   };
   word = "kai is gae";
