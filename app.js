@@ -43,6 +43,21 @@ app.post('/calls', (req, res) => {
   res.status(200).json(response);
 });
 
+
+app.post('/incoming-call', (req, res) => {
+    const response = {
+      ivr: {
+        play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/press1.mp3",
+        options: {
+          "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/calls"
+        },
+        timeout: 10,
+        maxdigits: 1
+      }
+    };
+    res.status(200).json(response);
+  });
+
 app.get('/', (req, res) => {
     res.status(200);
     res.send(word);
