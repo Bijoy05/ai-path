@@ -47,7 +47,7 @@ app.post('/calls', (req, res) => {
 app.post('/incoming-call', (req, res) => {
     const response = {
       ivr: {
-        play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/press1.mp3",
+        // play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/press1.mp3",
         options: {
           "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/calls"
         },
