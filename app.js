@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-require('.env').config();
+require('dotenv').config();
 const app = express();
 const server = require('http').Server(app);
 const port = process.env.PORT || 5501;
