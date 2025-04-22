@@ -93,12 +93,36 @@ app.post('/calls', (req, res) => {
 //   });
 
 
-app.post('/play-music', (req, res) => {
-    const response = {
-      play: "https://file-examples.com/storage/feeed4f6296807c3196e058/2017/11/file_example_MP3_700KB.mp3",
-      skippable: false
-    };
-    res.status(200).json(response);
+app.post('/play-music', async (req, res) => {
+    try {
+      const musicData = await generateMusic(
+        "A funny music about the great amazon customer service",
+        "Rock",
+        "AWS"
+      );
+  
+      if (!musicData || !musicData.data || !musicData.data[0] || !musicData.data[0].audio_url) {
+        console.error("Invalid Suno response:", musicData);
+        return res.status(200).json({
+          play: "https://file-examples.com/storage/feeed4f6296807c3196e058/2017/11/file_example_MP3_700KB.mp3",
+          skippable: false
+        });
+      }
+  
+      const audioUrl = musicData.data[0].audio_url;
+  
+      res.status(200).json({
+        play: audioUrl,
+        skippable: false
+      });
+  
+    } catch (error) {
+      console.error("Error generating music:", error.message);
+      res.status(200).json({
+        play: "https://file-examples.com/storage/feeed4f6296807c3196e058/2017/11/file_example_MP3_700KB.mp3",
+        skippable: false
+      });
+    }
   });
 
 
