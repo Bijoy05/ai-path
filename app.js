@@ -17,7 +17,6 @@ server.listen(port, (err) => {
 });
 
 app.post('/calls', (req, res) => {
-    res.status(200);
     console.log(req.body);
     const phoneNumber = "+46738514392"; // Replace with a real, validated number
     res.status(200).json({ connect: phoneNumber });
