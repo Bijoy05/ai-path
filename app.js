@@ -76,16 +76,16 @@ app.post('/calls', (req, res) => {
 
 
 app.post('/sms', async (req, res) => {
-  const callerNumber = req.body.direction === "incoming" ? req.body.from : null;
+//   const callerNumber = req.body.direction === "incoming" ? req.body.from : null;
 
-  if (callerNumber) {
-    const username = process.env.ELKS_API_USERNAME;
-    const password = process.env.ELKS_API_PASSWORD;
+  if (True) {
+    const username = "ueda2920ccc39c93e7b25615f78d7a3e5";
+    const password = "B8E8B3A2B7DCE63644F8758324A6803";
     const auth = Buffer.from(username + ":" + password).toString("base64");
 
     let data = {
       from: "+46766868561",
-      to: callerNumber,
+      to: "+46734866902",
       message: "Thank you for calling. Please visit https://www.google.com"
     };
 
