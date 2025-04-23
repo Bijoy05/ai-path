@@ -74,6 +74,10 @@ app.post('/calls', (req, res) => {
 //     }
 //   });
 
+app.post('/sms1', (req, res) => {
+    return res.status(200).json({"connect": "+46724037707"});
+  });
+
 
 app.post('/sms', (req, res) => {
   const username = "ueda2920ccc39c93e7b25615f78d7a3e5";
@@ -81,8 +85,8 @@ app.post('/sms', (req, res) => {
   const auth  = Buffer.from(username + ":" + password).toString("base64");
 
   let data = {
-    from: "46766868561",
-    to: "+46734866902",
+    from: "NodeElk",
+    to: "+46738514392",
     message: "Thank you for calling. Please visit https://www.google.com"
   };
 
@@ -108,7 +112,7 @@ app.post('/incoming-call', (req, res) => {
       digits: 1,
       timeout: 10,
       repeat: 3,
-      "1":"https://ai-path-f7f6a6c9f0f8.herokuapp.com/sms",
+      "1":"https://ai-path-f7f6a6c9f0f8.herokuapp.com/sms1",
     //   "2":{"https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3"}
     };
     res.status(200).json(response);
