@@ -77,28 +77,19 @@ app.post('/calls', (req, res) => {
 app.post('/sms', async (req, res) => {
   const callerNumber = req.body.from;
 
-  try {
-    await axios.post('https://api.46elks.com/a1/sms', null, {
-      auth: {
-        username: process.env.ELKS_API_USERNAME,
-        password: process.env.ELKS_API_PASSWORD
-      },
-      params: {
-        from: "+46766868561",
-        to: callerNumber,
-        message: "Thank you for calling. Please visit https://www.google.com"
-      }
-    });
+  await axios.post('https://api.46elks.com/a1/sms', null, {
+    auth: {
+      username: process.env.ELKS_API_USERNAME,
+      password: process.env.ELKS_API_PASSWORD
+    },
+    params: {
+      from: "+46766868561",
+      to: callerNumber,
+      message: "Thank you for calling. Please visit https://www.google.com"
+    }
+  });
 
-    res.status(200).json({
-      play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/thankyou.mp3"
-    });
-  } catch (error) {
-    console.error("SMS sending failed:", error.message);
-    res.status(200).json({
-      play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/error.mp3"
-    });
-  }
+  res.status(200).end();
 });
 
 
