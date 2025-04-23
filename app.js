@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 let word = "Hello World!";
-
+let generatedAudioUrl = null;
 
 const axios = require('axios');
 
@@ -134,8 +134,8 @@ app.post('/play-music', async (req, res) => {
           });
 
           if (status.data.status === "completed" && status.data.audio_url) {
-            console.log("Music ready:", status.data.audio_url);
-            // You can optionally store the audio_url in memory or DB for later streaming
+            generatedAudioUrl = status.data.audio_url;
+            console.log("Music ready:", generatedAudioUrl);
             break;
           }
         } catch (err) {
@@ -164,7 +164,8 @@ app.post('/incoming-call', (req, res) => {
         digits: 1,
         timeout: 10,
         repeat: 3,
-        "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/play-music"
+        "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/play-music",
+        "2": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/get-music"
       };
     res.status(200).json(response);
   });
@@ -175,6 +176,7 @@ app.get('/', (req, res) => {
     res.end();
 });
 // GET /play-music route with same logic as POST
+
 app.get('/play-music', async (req, res) => {
   try {
     const musicData = await axios.post('https://apibox.erweima.ai/api/v1/generate', {
@@ -231,6 +233,20 @@ app.get('/play-music', async (req, res) => {
     console.error("Error in async music generation (GET):", error.message);
     res.status(200).json({
       play: "https://file-examples.com/storage/feeed4f6296807c3196e058/2017/11/file_example_MP3_700KB.mp3",
+      skippable: false
+    });
+  }
+});
+
+app.get('/get-music', (req, res) => {
+  if (generatedAudioUrl) {
+    res.status(200).json({
+      play: generatedAudioUrl,
+      skippable: false
+    });
+  } else {
+    res.status(200).json({
+      play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3",
       skippable: false
     });
   }
