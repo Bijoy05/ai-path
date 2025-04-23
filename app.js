@@ -11,27 +11,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 let word = "Hello World!";
-let generatedAudioUrl = null;
+
 
 const axios = require('axios');
 
-async function generateMusic(prompt, style, title) {
-  const response = await axios.post('https://apibox.erweima.ai/api/v1/generate', {
-    prompt: prompt,
-    style: style,
-    title: title,
-    customMode: true,
-    instrumental: true,
-    model: "V3_5"
-  }, {
-    headers: {
-      'Authorization': `Bearer ${process.env.SUNO_API_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  });
-
-  return response.data;
-}
 
 
 server.listen(port, (err) => {
@@ -93,161 +76,59 @@ app.post('/calls', (req, res) => {
 //   });
 
 
-app.post('/play-music', async (req, res) => {
+const axios = require('axios');
+
+app.post('/sms', async (req, res) => {
+  const callerNumber = req.body.from;
+
   try {
-    const musicData = await axios.post('https://apibox.erweima.ai/api/v1/generate', {
-      prompt: "A funny music about the great amazon customer service",
-      style: "Rock",
-      title: "AWS",
-      customMode: true,
-      instrumental: true,
-      model: "V3_5"
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.SUNO_API_KEY}`,
-        'Content-Type': 'application/json'
+    await axios.post('https://api.46elks.com/a1/sms', null, {
+      auth: {
+        username: process.env.ELKS_API_USERNAME,
+        password: process.env.ELKS_API_PASSWORD
+      },
+      params: {
+        from: "+46766868561",
+        to: callerNumber,
+        message: "Thank you for calling. Please visit https://www.google.com"
       }
     });
 
-    const taskId = musicData.data.task_id;
-    if (!taskId) {
-      throw new Error("No task_id returned from Suno API");
-    }
-
-    console.log("Music generation started with task ID:", taskId);
-
-    // Immediately return a holding tone while music is being generated
-    res.status(200).json({
-      play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3",
-      skippable: false
-    });
-
-    // Start polling in the background
-    const pollForAudio = async () => {
-      let tries = 0;
-      while (tries < 12) { // Poll up to 60 seconds (12 x 5s)
-        try {
-          const status = await axios.get(`https://apibox.erweima.ai/api/v1/status/${taskId}`, {
-            headers: {
-              'Authorization': `Bearer ${process.env.SUNO_API_KEY}`
-            }
-          });
-
-          if (status.data.status === "completed" && status.data.audio_url) {
-            generatedAudioUrl = status.data.audio_url;
-            console.log("Music ready:", generatedAudioUrl);
-            break;
-          }
-        } catch (err) {
-          console.error("Polling error:", err.message);
-        }
-        await new Promise(res => setTimeout(res, 5000));
-        tries++;
-      }
-    };
-
-    pollForAudio();
-
+    res.status(200).json({ play: "https://yourdomain.com/media/thankyou.mp3" });
   } catch (error) {
-    console.error("Error in async music generation:", error.message);
-    res.status(200).json({
-      play: "https://file-examples.com/storage/feeed4f6296807c3196e058/2017/11/file_example_MP3_700KB.mp3",
-      skippable: false
-    });
+    console.error("SMS sending failed:", error.message);
+    res.status(200).json({ play: "https://yourdomain.com/media/error.mp3" });
   }
 });
 
 
 app.post('/incoming-call', (req, res) => {
     const response = {
-        ivr: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/Hello.mp3",
-        digits: 1,
-        timeout: 10,
-        repeat: 3,
-        "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/play-music",
-        "2": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/get-music"
-      };
+      ivr: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/Hello.mp3",
+      digits: 1,
+      timeout: 10,
+      repeat: 3,
+      "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/sms",
+      "2": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3"
+    };
     res.status(200).json(response);
   });
+
+
+// app.post('/incoming-call', (req, res) => {
+//     const response = {
+//         ivr: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/Hello.mp3",
+//         digits: 1,
+//         timeout: 10,
+//         repeat: 3,
+//         "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/play-music",
+//         "2": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/get-music"
+//       };
+//     res.status(200).json(response);
+//   });
 
 app.get('/', (req, res) => {
     res.status(200);
     res.send(word);
     res.end();
-});
-// GET /play-music route with same logic as POST
-
-app.get('/play-music', async (req, res) => {
-  try {
-    const musicData = await axios.post('https://apibox.erweima.ai/api/v1/generate', {
-      prompt: "A funny music about the great amazon customer service",
-      style: "Rock",
-      title: "AWS",
-      customMode: true,
-      instrumental: true,
-      model: "V3_5"
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.SUNO_API_KEY}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    const taskId = musicData.data.task_id;
-    if (!taskId) {
-      throw new Error("No task_id returned from Suno API");
-    }
-
-    console.log("Music generation started with task ID:", taskId);
-
-    res.status(200).json({
-      play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3",
-      skippable: false
-    });
-
-    const pollForAudio = async () => {
-      let tries = 0;
-      while (tries < 12) {
-        try {
-          const status = await axios.get(`https://apibox.erweima.ai/api/v1/status/${taskId}`, {
-            headers: {
-              'Authorization': `Bearer ${process.env.SUNO_API_KEY}`
-            }
-          });
-
-          if (status.data.status === "completed" && status.data.audio_url) {
-            console.log("Music ready:", status.data.audio_url);
-            break;
-          }
-        } catch (err) {
-          console.error("Polling error:", err.message);
-        }
-        await new Promise(res => setTimeout(res, 5000));
-        tries++;
-      }
-    };
-
-    pollForAudio();
-
-  } catch (error) {
-    console.error("Error in async music generation (GET):", error.message);
-    res.status(200).json({
-      play: "https://file-examples.com/storage/feeed4f6296807c3196e058/2017/11/file_example_MP3_700KB.mp3",
-      skippable: false
-    });
-  }
-});
-
-app.get('/get-music', (req, res) => {
-  if (generatedAudioUrl) {
-    res.status(200).json({
-      play: generatedAudioUrl,
-      skippable: false
-    });
-  } else {
-    res.status(200).json({
-      play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3",
-      skippable: false
-    });
-  }
 });
