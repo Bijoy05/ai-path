@@ -87,7 +87,7 @@ app.post('/sms', (req, res) => {
   let data = {
     from: "NodeElk",
     to: "+46738514392",
-    message: "Thank you for calling. Please visit https://www.google.com"
+    message: "Thank you for calling. Please visit" // https://www.google.com"
   };
 
   data = new URLSearchParams(data);
