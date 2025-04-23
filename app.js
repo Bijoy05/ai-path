@@ -102,7 +102,6 @@ app.post('/sms', (req, res) => {
   .then(json => console.log(json))
   .catch(err => console.log(err));
 
-  res.status(200).end();
   return res.status(200).json({"connect": "+46724037707"})
 });
 
