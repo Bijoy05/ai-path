@@ -13,9 +13,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 let word = "Hello World!";
 
 
-const axios = require('axios');
-
-
 
 server.listen(port, (err) => {
     if (err) {
@@ -76,8 +73,6 @@ app.post('/calls', (req, res) => {
 //   });
 
 
-const axios = require('axios');
-
 app.post('/sms', async (req, res) => {
   const callerNumber = req.body.from;
 
@@ -94,10 +89,14 @@ app.post('/sms', async (req, res) => {
       }
     });
 
-    res.status(200).json({ play: "https://yourdomain.com/media/thankyou.mp3" });
+    res.status(200).json({
+      play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/thankyou.mp3"
+    });
   } catch (error) {
     console.error("SMS sending failed:", error.message);
-    res.status(200).json({ play: "https://yourdomain.com/media/error.mp3" });
+    res.status(200).json({
+      play: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/error.mp3"
+    });
   }
 });
 
