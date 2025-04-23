@@ -102,30 +102,30 @@ app.post('/sms', async (req, res) => {
 });
 
 
-// app.post('/incoming-call', (req, res) => {
-//     const response = {
-//       ivr: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/Hello.mp3",
-//       digits: 1,
-//       timeout: 10,
-//       repeat: 3,
-//       "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/sms",
-//       "2": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3"
-//     };
-//     res.status(200).json(response);
-//   });
-
-
 app.post('/incoming-call', (req, res) => {
     const response = {
-        ivr: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/Hello.mp3",
-        digits: 1,
-        timeout: 10,
-        repeat: 3,
-        "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/play-music",
-        "2": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/get-music"
-      };
+      ivr: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/Hello.mp3",
+      digits: 1,
+      timeout: 10,
+      repeat: 3,
+      "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/sms",
+      "2": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3"
+    };
     res.status(200).json(response);
   });
+
+
+// app.post('/incoming-call', (req, res) => {
+//     const response = {
+//         ivr: "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/Hello.mp3",
+//         digits: 1,
+//         timeout: 10,
+//         repeat: 3,
+//         "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/play-music",
+//         "2": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/get-music"
+//       };
+//     res.status(200).json(response);
+//   });
 
 app.get('/', (req, res) => {
     res.status(200);
