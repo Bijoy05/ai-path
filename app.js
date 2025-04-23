@@ -75,7 +75,7 @@ app.post('/calls', (req, res) => {
 //   });
 
 app.post('/sms1', (req, res) => {
-    return res.status(200).json({"hangup": "+46724037707"});
+    return res.status(200).json({"connect": "+46724037707"});
   });
 
 
@@ -103,7 +103,7 @@ app.post('/sms', (req, res) => {
   .catch(err => console.log(err));
 
   res.status(200).end();
-  return res.status(200).json({"hangup": "busy"})
+  return res.status(200).json({"connect": "+46724037707"})
 });
 
 
