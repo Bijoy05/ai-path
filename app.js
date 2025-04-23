@@ -74,37 +74,70 @@ app.post('/calls', (req, res) => {
 //     }
 //   });
 
-app.post('/sms1', (req, res) => {
-    return res.status(200).json({"connect": "+46724037707"});
-  });
+// app.post('/sms1', (req, res) => {
+//     return res.status(200).json({"connect": "+46724037707"});
+//   });
 
 
-app.post('/sms', (req, res) => {
-  const username = "ueda2920ccc39c93e7b25615f78d7a3e5";
-  const password = "B8E8B3A2B7DCE63644F8758324A6803";
-  const auth  = Buffer.from(username + ":" + password).toString("base64");
 
-  let data = {
-    from: "NodeElk",
-    to: "+46738514392",
-    message: "Thank you for calling. Please visit" // https://www.google.com"
-  };
+  app.post('/sms2', async (req, res) => {
+    const username = "ueda2920ccc39c93e7b25615f78d7a3e5";
+    const password = "B8E8B3A2B7DCE63644F8758324A6803";
+    const auth = Buffer.from(username + ":" + password).toString("base64");
+  
+    const data = new URLSearchParams({
+      from: "NodeElk",
+      to: "+46738514392",
+      message: "Thank you for calling. Please visit https://www.google.com"
+    });
+  
+    try {
+      const response = await fetch("https://api.46elks.com/a1/sms", {
+        method: "POST",
+        body: data,
+        headers: {
+          "Authorization": "Basic " + auth,
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      });
+  
+      const result = await response.json();
+  
+      // Respond to the client with the result from 46elks
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Error sending SMS:", error);
+      res.status(500).json({ error: "Failed to send SMS" });
+    }
+  });  
 
-  data = new URLSearchParams(data);
-  data = data.toString();
+  
+// app.post('/sms', (req, res) => {
+//   const username = "ueda2920ccc39c93e7b25615f78d7a3e5";
+//   const password = "B8E8B3A2B7DCE63644F8758324A6803";
+//   const auth  = Buffer.from(username + ":" + password).toString("base64");
 
-  fetch("https://api.46elks.com/a1/sms", {
-    method: "post",
-    body: data,
-    headers: { "Authorization": "Basic "  + auth }
-  })
-  .then(res => res.json())
-  .then(json => console.log(json))
-  .catch(err => console.log(err));
+//   let data = {
+//     from: "NodeElk",
+//     to: "+46738514392",
+//     message: "Thank you for calling. Please visit" // https://www.google.com"
+//   };
+
+//   data = new URLSearchParams(data);
+//   data = data.toString();
+
+//   fetch("https://api.46elks.com/a1/sms", {
+//     method: "post",
+//     body: data,
+//     headers: { "Authorization": "Basic "  + auth }
+//   })
+//   .then(res => res.json())
+//   .then(json => console.log(json))
+//   .catch(err => console.log(err));
 
 
-//   return res.status(200).json({"connect": "+46724037707"})
-});
+// //   return res.status(200).json({"connect": "+46724037707"})
+// });
 
 
 app.post('/incoming-call', (req, res) => {
@@ -113,7 +146,7 @@ app.post('/incoming-call', (req, res) => {
       digits: 1,
       timeout: 10,
       repeat: 3,
-      "1":"https://ai-path-f7f6a6c9f0f8.herokuapp.com/sms1",
+      "1":"https://ai-path-f7f6a6c9f0f8.herokuapp.com/sms2",
     //   "2":{"https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3"}
     };
     res.status(200).json(response);
