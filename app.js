@@ -7,6 +7,7 @@ const app = express();
 const server = require('http').Server(app);
 const port = process.env.PORT || 5501;
 const path = require('path');
+const { exec } = require('child_process');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -80,29 +81,20 @@ app.post('/sms1', (req, res) => {
 
 
 app.post('/sms', (req, res) => {
-  const username = "ueda2920ccc39c93e7b25615f78d7a3e5";
-  const password = "B8E8B3A2B7DCE63644F8758324A6803";
-  const auth  = Buffer.from(username + ":" + password).toString("base64");
-
-  let data = {
-    from: "NodeElk",
-    to: "+46738514392",
-    message: "Thank you for calling. Please visit" // https://www.google.com"
-  };
-
-  data = new URLSearchParams(data);
-  data = data.toString();
-
-  fetch("https://api.46elks.com/a1/sms", {
-    method: "post",
-    body: data,
-    headers: { "Authorization": "Basic "  + auth }
-  })
-  .then(res => res.json())
-  .then(json => console.log(json))
-  .catch(err => console.log(err));
-
-  return res.status(200).json({"connect": "+46724037707"})
+  const scriptPath = path.join(__dirname, 'send_sms.py');
+  exec(`pip install requests`);
+  exec(`python3 ${scriptPath}`, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error: ${error.message}`);
+      return res.status(500).send("SMS sending failed.");
+    }
+    if (stderr) {
+      console.error(`Stderr: ${stderr}`);
+      return res.status(500).send("SMS sending error.");
+    }
+    console.log(`Stdout: ${stdout}`);
+    return res.status(200).json({ message: "SMS sent via Python script." });
+  });
 });
 
 
