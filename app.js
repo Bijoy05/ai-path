@@ -75,19 +75,21 @@ app.post('/calls', (req, res) => {
 
 
 app.post('/sms', async (req, res) => {
-  const callerNumber = req.body.from;
+  const callerNumber = req.body.direction === "incoming" ? req.body.from : null;
 
-  await axios.post('https://api.46elks.com/a1/sms', null, {
-    auth: {
-      username: process.env.ELKS_API_USERNAME,
-      password: process.env.ELKS_API_PASSWORD
-    },
-    params: {
-      from: "+46766868561",
-      to: callerNumber,
-      message: "Thank you for calling. Please visit https://www.google.com"
-    }
-  });
+  if (callerNumber) {
+    await axios.post('https://api.46elks.com/a1/sms', null, {
+      auth: {
+        username: process.env.ELKS_API_USERNAME,
+        password: process.env.ELKS_API_PASSWORD
+      },
+      params: {
+        from: "+46766868561",
+        to: callerNumber,
+        message: "Thank you for calling. Please visit https://www.google.com"
+      }
+    });
+  }
 
   res.status(200).end();
 });
@@ -99,8 +101,8 @@ app.post('/incoming-call', (req, res) => {
       digits: 1,
       timeout: 10,
       repeat: 3,
-      "1": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/sms",
-      "2": "https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3"
+      "1":"https://ai-path-f7f6a6c9f0f8.herokuapp.com/sms",
+      "2":"https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3"
     };
     res.status(200).json(response);
   });
