@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const axios = require('axios');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const app = express();
 const server = require('http').Server(app);
 const port = process.env.PORT || 5501;
@@ -78,17 +79,30 @@ app.post('/sms', async (req, res) => {
   const callerNumber = req.body.direction === "incoming" ? req.body.from : null;
 
   if (callerNumber) {
-    await axios.post('https://api.46elks.com/a1/sms', null, {
-      auth: {
-        username: process.env.ELKS_API_USERNAME,
-        password: process.env.ELKS_API_PASSWORD
-      },
-      params: {
-        from: "+46766868561",
-        to: callerNumber,
-        message: "Thank you for calling. Please visit https://www.google.com"
-      }
-    });
+    const username = process.env.ELKS_API_USERNAME;
+    const password = process.env.ELKS_API_PASSWORD;
+    const auth = Buffer.from(username + ":" + password).toString("base64");
+
+    let data = {
+      from: "+46766868561",
+      to: callerNumber,
+      message: "Thank you for calling. Please visit https://www.google.com"
+    };
+
+    data = new URLSearchParams(data).toString();
+
+    try {
+      await fetch("https://api.46elks.com/a1/sms", {
+        method: "post",
+        body: data,
+        headers: {
+          "Authorization": "Basic " + auth,
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      });
+    } catch (err) {
+      console.log("SMS sending failed:", err);
+    }
   }
 
   res.status(200).end();
