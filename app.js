@@ -81,7 +81,7 @@ app.post('/sms', (req, res) => {
   const auth  = Buffer.from(username + ":" + password).toString("base64");
 
   let data = {
-    from: "NodeElk",
+    from: "46766868561",
     to: "+46734866902",
     message: "Thank you for calling. Please visit https://www.google.com"
   };
