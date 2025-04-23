@@ -116,7 +116,7 @@ app.post('/incoming-call', (req, res) => {
       timeout: 10,
       repeat: 3,
       "1":"https://ai-path-f7f6a6c9f0f8.herokuapp.com/sms",
-      "2":"https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3"
+    //   "2":{"https://ai-path-f7f6a6c9f0f8.herokuapp.com/media/hold.mp3"}
     };
     res.status(200).json(response);
   });
